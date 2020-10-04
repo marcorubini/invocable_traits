@@ -2,7 +2,7 @@
 #define INV_TEST_TRAITS_MEMBER_FUNCTION_POINTER
 
 #include <concepts>
-#include <invocable_traits/member_function_pointer_traits.hpp>
+#include <marcorubini/invocable_traits/member_function_pointer_traits.hpp>
 
 namespace member_function_pointer_tests
 {

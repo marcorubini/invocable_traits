@@ -1,7 +1,7 @@
 #ifndef INV_TEST_TRAITS_FUNCTION_HPP
 #define INV_TEST_TRAITS_FUNCTION_HPP
 
-#include <invocable_traits/function_traits.hpp>
+#include <marcorubini/invocable_traits/function_traits.hpp>
 
 namespace function_tests
 {

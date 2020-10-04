@@ -1,8 +1,7 @@
 #ifndef INV_TEST_TRAITS_INVOCABLE
 #define INV_TEST_TRAITS_INVOCABLE
 
-// #include <invocable_traits/invocable_traits.hpp>
-#include "../../include/invocable_traits/invocable_traits.hpp"
+#include <marcorubini/invocable_traits/invocable_traits.hpp>
 
 namespace invocable_tests
 {

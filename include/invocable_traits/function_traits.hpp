@@ -1,8 +1,6 @@
 #ifndef INV_FUNCTION_TRAITS_HPP
 #define INV_FUNCTION_TRAITS_HPP
 
-#include "hedley.hpp"
-
 #include <tuple>
 #include <type_traits>
 #include <utility>
@@ -258,7 +256,7 @@ namespace inv
 #define ADD_CVREF_112 const volatile &&
 
 #define VARIADIC_0
-#define VARIADIC_1 ...
+#define VARIADIC_1 , ...
 
 #define CONCAT2(X, Y) X##Y
 #define CONCAT4(X, A, B, C) X##A##B##C
@@ -283,11 +281,6 @@ namespace inv
 
 #define DEFINE_FUNCTION_TRAITS(C, V, R, IV) \
   DEFINE_FUNCTION_TRAITS_IMPL(C, V, R, IV, MAYBE_CVREF(C, V, R), MAYBE_VARIADIC(IV))
-
-  HEDLEY_DIAGNOSTIC_PUSH
-  HEDLEY_DIAGNOSTIC_DISABLE_UNKNOWN_PRAGMAS
-#pragma GCC diagnostic ignored "-Wpragmas"
-#pragma GCC diagnostic ignored "-Wambiguous-ellipsis"
 
   DEFINE_MAKE_FUNCTION(0, 0, 0, 0);
   DEFINE_MAKE_FUNCTION(0, 0, 0, 1);
@@ -340,8 +333,6 @@ namespace inv
   DEFINE_FUNCTION_TRAITS(1, 0, 2, 1);
   DEFINE_FUNCTION_TRAITS(1, 1, 2, 0);
   DEFINE_FUNCTION_TRAITS(1, 1, 2, 1);
-
-  HEDLEY_DIAGNOSTIC_POP
 
 #undef DEFINE_FUNCTION_TRAITS
 #undef DEFINE_FUNCTION_TRAITS_IMPL

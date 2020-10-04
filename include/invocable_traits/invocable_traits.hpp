@@ -72,7 +72,7 @@ namespace inv
   template<DeducibleInvocable T>
   using invocable_args_t = function_args_t<invocable_function_t<T>>;
 
-  template<DeducibleInvocable T, std::uint8_t index>
+  template<DeducibleInvocable T, std::size_t index>
   using invocable_arg_t = function_arg_t<invocable_function_t<T>, index>;
 
   namespace impl{

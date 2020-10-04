@@ -18,3 +18,11 @@ if(ENABLE_TESTING)
   add_subdirectory(test)
 endif()
 
+set(header_path "${CMAKE_CURRENT_SOURCE_DIR}/include/invocable_traits")
+set(header ${header_path}/invocable_traits.hpp
+  ${header_path}/function_traits.hpp
+  ${header_path}/member_function_pointer_traits.hpp
+  ${header_path}/member_object_pointer_traits.hpp)
+
+install(FILES ${header} DESTINATION "include/invocable_traits")
+

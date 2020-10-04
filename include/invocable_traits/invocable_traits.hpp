@@ -5,8 +5,6 @@
 #include "./member_function_pointer_traits.hpp"
 #include "./member_object_pointer_traits.hpp"
 
-#include <iostream>
-
 namespace inv
 {
 

@@ -14,51 +14,46 @@ set(header_files
 )
 
 # main target
-add_library(marcorubini_invocable_traits INTERFACE)
-add_library(marcorubini::marcorubini_invocable_traits ALIAS
-            marcorubini_invocable_traits)
+set(main_target marcorubini_${PROJECT_NAME})
+add_library(${main_target} INTERFACE)
+add_library(marcorubini::${main_target} ALIAS ${main_target})
 
-target_sources(marcorubini_invocable_traits
-               INTERFACE "$<BUILD_INTERFACE:${header_files}>")
-target_compile_features(marcorubini_invocable_traits INTERFACE cxx_std_20)
+target_sources(${main_target} INTERFACE "$<BUILD_INTERFACE:${header_files}>")
+target_compile_features(${main_target} INTERFACE cxx_std_20)
 target_include_directories(
-  marcorubini_invocable_traits SYSTEM
+  ${main_target} SYSTEM
   INTERFACE "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/>"
             "$<INSTALL_INTERFACE:include/>")
 
 if(NOT dependency_via_submodule)
   include(CMakePackageConfigHelpers)
-  write_basic_package_version_file(
-    marcorubini_invocable_traits-config-version.cmake
-    COMPATIBILITY ExactVersion)
+  write_basic_package_version_file(${main_target}-config-version.cmake
+                                   COMPATIBILITY ExactVersion)
   install(
-    TARGETS marcorubini_invocable_traits
-    EXPORT marcorubini_invocable_traits_targets
+    TARGETS ${main_target}
+    EXPORT ${main_target}_targets
     INCLUDES
     DESTINATION include)
   install(
-    EXPORT marcorubini_invocable_traits_targets
-    DESTINATION lib/cmake/marcorubini_invocable_traits
-    FILE marcorubini_invocable_traits-targets.cmake
+    EXPORT ${main_target}_targets
+    DESTINATION lib/cmake/${main_target}
+    FILE ${main_target}-targets.cmake
     NAMESPACE marcorubini::)
   install(DIRECTORY include/ DESTINATION include)
-  install(
-    FILES
-      marcorubini_invocable_traits-config.cmake
-      ${CMAKE_CURRENT_BINARY_DIR}/marcorubini_invocable_traits-config-version.cmake
-    DESTINATION lib/cmake/marcorubini_invocable_traits)
+  install(FILES ${main_target}-config.cmake
+                ${CMAKE_CURRENT_BINARY_DIR}/${main_target}-config-version.cmake
+          DESTINATION lib/cmake/${main_target})
 else()
   message(STATUS "Dependency installed via submodule, installation unavailable")
 endif()
 
 # testing
-option(INVOCABLE_TRAITS_BUILD_TEST
-       "build tests of marcorubini/invocable_traits" OFF)
+option(INVOCABLE_TRAITS_BUILD_TEST "build tests of marcorubini/${PROJECT_NAME}"
+       OFF)
 if(${INVOCABLE_TRAITS_BUILD_TEST} OR (CMAKE_CURRENT_SOURCE_DIR STREQUAL
                                       CMAKE_SOURCE_DIR))
   set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
-  message("Building of invocable_traits constexpr tests enabled.")
+  message("Building of ${PROJECT_NAME} constexpr tests enabled.")
   enable_testing()
   add_subdirectory(test)
 endif()
-

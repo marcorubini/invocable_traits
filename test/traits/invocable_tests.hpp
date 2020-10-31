@@ -5,7 +5,7 @@
 
 namespace invocable_tests
 {
-  using namespace ruby;
+  using namespace ruby::invocable;
   
   constexpr auto fn1 = [](int x){ return 0; };
   constexpr auto fn2 = [](int x) mutable{ return 0.0f; };
@@ -83,7 +83,7 @@ namespace invocable_tests
     static_assert( std::same_as<invocable_function_t<Fn1>, int(int) const> );
     static_assert( std::same_as<invocable_function_t<Fn2>, float(int)> );
     static_assert( std::same_as<invocable_function_t<Fn3>, double(int) noexcept> );
-    static_assert( std::same_as<invocable_function_t<decltype(&Fn4::x)>, char()> );
+    static_assert( std::same_as<invocable_function_t<decltype(&Fn4::x)>, char(Fn4*)> );
   }
 
 }

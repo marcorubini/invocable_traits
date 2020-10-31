@@ -480,7 +480,7 @@ namespace ruby::invocable
   
   template<typename T>
     requires std::is_member_object_pointer_v<T>
-  struct invocable_traits<T> : function_types<0,0,0,0,0,member_object_pointer_object_t<T>>{};
+  struct invocable_traits<T> : function_types<0,0,0,0,0,member_object_pointer_object_t<T>, member_object_pointer_class_t<T>* >{};
 
   template<typename T>
     requires std::is_member_function_pointer_v<decltype(&T::operator())>

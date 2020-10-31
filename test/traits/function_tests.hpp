@@ -5,7 +5,7 @@
 
 namespace function_tests
 {
-  using namespace ruby;
+  using namespace ruby::invocable;
 
   using Fn0 = int();
   using Fn1 = int const();

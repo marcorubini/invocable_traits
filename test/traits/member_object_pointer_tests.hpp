@@ -6,7 +6,7 @@
 
 namespace member_object_pointer_tests
 {
-  using namespace ruby;
+  using namespace ruby::invocable;
 
   namespace test0
   {

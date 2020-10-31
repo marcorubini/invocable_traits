@@ -1,11 +1,11 @@
 #ifndef INV_TEST_TRAITS_FUNCTION_HPP
 #define INV_TEST_TRAITS_FUNCTION_HPP
 
-#include <marcorubini/invocable_traits/function_traits.hpp>
+#include <ruby/invocable_traits/function_traits.hpp>
 
 namespace function_tests
 {
-  using namespace inv;
+  using namespace ruby;
 
   using Fn0 = int();
   using Fn1 = int const();

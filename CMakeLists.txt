@@ -7,16 +7,16 @@ project(
   HOMEPAGE_URL "https://github.com/marcorubini/invocable_traits")
 
 set(header_files
-    ${PROJECT_SOURCE_DIR}/include/marcorubini/invocable_traits/function_traits.hpp
-    ${PROJECT_SOURCE_DIR}/include/marcorubini/invocable_traits/member_function_pointer_traits.hpp
-    ${PROJECT_SOURCE_DIR}/include/marcorubini/invocable_traits/member_object_pointer_traits.hpp
-    ${PROJECT_SOURCE_DIR}/include/marcorubini/invocable_traits/invocable_traits.hpp
+    ${PROJECT_SOURCE_DIR}/include/ruby/invocable_traits/function_traits.hpp
+    ${PROJECT_SOURCE_DIR}/include/ruby/invocable_traits/member_function_pointer_traits.hpp
+    ${PROJECT_SOURCE_DIR}/include/ruby/invocable_traits/member_object_pointer_traits.hpp
+    ${PROJECT_SOURCE_DIR}/include/ruby/invocable_traits/invocable_traits.hpp
 )
 
 # main target
-set(main_target marcorubini_${PROJECT_NAME})
+set(main_target ruby_${PROJECT_NAME})
 add_library(${main_target} INTERFACE)
-add_library(marcorubini::${main_target} ALIAS ${main_target})
+add_library(ruby::${main_target} ALIAS ${main_target})
 
 target_sources(${main_target} INTERFACE "$<BUILD_INTERFACE:${header_files}>")
 target_compile_features(${main_target} INTERFACE cxx_std_20)
@@ -38,7 +38,7 @@ if(NOT dependency_via_submodule)
     EXPORT ${main_target}_targets
     DESTINATION lib/cmake/${main_target}
     FILE ${main_target}-targets.cmake
-    NAMESPACE marcorubini::)
+    NAMESPACE ruby::)
   install(DIRECTORY include/ DESTINATION include)
   install(FILES ${main_target}-config.cmake
                 ${CMAKE_CURRENT_BINARY_DIR}/${main_target}-config-version.cmake
@@ -48,7 +48,7 @@ else()
 endif()
 
 # testing
-option(INVOCABLE_TRAITS_BUILD_TEST "build tests of marcorubini/${PROJECT_NAME}"
+option(INVOCABLE_TRAITS_BUILD_TEST "build tests of ruby/${PROJECT_NAME}"
        OFF)
 if(${INVOCABLE_TRAITS_BUILD_TEST} OR (CMAKE_CURRENT_SOURCE_DIR STREQUAL
                                       CMAKE_SOURCE_DIR))

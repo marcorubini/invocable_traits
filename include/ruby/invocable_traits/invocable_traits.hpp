@@ -1,11 +1,11 @@
-#ifndef INV_INVOCABLE_TRAITS_HPP
-#define INV_INVOCABLE_TRAITS_HPP
+#ifndef RUBY_INVOCABLE_TRAITS_HPP
+#define RUBY_INVOCABLE_TRAITS_HPP
 
 #include "./function_traits.hpp"
 #include "./member_function_pointer_traits.hpp"
 #include "./member_object_pointer_traits.hpp"
 
-namespace inv
+namespace ruby
 {
 
   template<typename T>
@@ -22,7 +22,7 @@ namespace inv
     inline constexpr bool is_reference_wrapper_v<std::reference_wrapper<T>> = true;
     
     template<typename T>
-    concept DeducibleInvocable =
+    concept InvokeDeducible =
       std::is_function_v<T> ||
       std::is_member_function_pointer_v<T> ||
       std::is_member_object_pointer_v<T> ||
@@ -30,11 +30,11 @@ namespace inv
   }
   
   template<typename T>
-  concept DeducibleInvocable = 
-    impl::DeducibleInvocable<T> ||
-    (std::is_reference_v<T> && impl::DeducibleInvocable<std::remove_reference_t<T>>) ||
-    (std::is_pointer_v<T> && impl::DeducibleInvocable<std::remove_pointer_t<T>>) ||
-    (impl::is_reference_wrapper_v<T> && impl::DeducibleInvocable<typename T::type>);
+  concept InvokeDeducible= 
+    impl::InvokeDeducible<T> ||
+    (std::is_reference_v<T> && impl::InvokeDeducible<std::remove_reference_t<T>>) ||
+    (std::is_pointer_v<T> && impl::InvokeDeducible<std::remove_pointer_t<T>>) ||
+    (impl::is_reference_wrapper_v<T> && impl::InvokeDeducible<typename T::type>);
 
   template<typename T>
     requires std::is_function_v<T>
@@ -63,23 +63,23 @@ namespace inv
   template<typename T>
   struct invocable_traits<T*> : invocable_traits<T>{};
   
-  template<DeducibleInvocable T>
+  template<InvokeDeducible T>
   using invocable_function_t = typename invocable_traits<T>::function_type;
 
-  template<DeducibleInvocable T>
+  template<InvokeDeducible T>
   using invocable_ret_t = function_ret_t<invocable_function_t<T>>;
 
-  template<DeducibleInvocable T>
+  template<InvokeDeducible T>
   using invocable_args_t = function_args_t<invocable_function_t<T>>;
 
-  template<DeducibleInvocable T, std::size_t index>
+  template<InvokeDeducible T, std::size_t index>
   using invocable_arg_t = function_arg_t<invocable_function_t<T>, index>;
 
   namespace impl{
-    struct ARGUMENT_TYPE_IS_NOT_DEDUCIBLE_INVOCABLE{};
+    struct ARGUMENT_TYPE_IS_NOT_DEDUCIBLE{};
 
     template<typename T>
-    using maybe_function_t = std::conditional_t<inv::DeducibleInvocable<T>, invocable_function_t<T>, ARGUMENT_TYPE_IS_NOT_DEDUCIBLE_INVOCABLE>;
+    using maybe_function_t = std::conditional_t<ruby::InvokeDeducible<T>, invocable_function_t<T>, ARGUMENT_TYPE_IS_NOT_DEDUCIBLE>;
   }
 
   // clang-format on

@@ -1,10 +1,10 @@
-#ifndef INV_MEMBER_FUNCTION_POINTER_TRAITS_HPP
-#define INV_MEMBER_FUNCTION_POINTER_TRAITS_HPP
+#ifndef RUBY_INVOCABLE_MEMBER_FUNCTION_POINTER_TRAITS_HPP
+#define RUBY_INVOCABLE_MEMBER_FUNCTION_POINTER_TRAITS_HPP
 
 #include <functional>
 #include <type_traits>
 
-namespace inv
+namespace ruby
 {
   template<typename T>
   struct member_function_pointer_traits
@@ -30,6 +30,6 @@ namespace inv
 
   // clang-format on
 
-} // namespace inv
+} // namespace ruby
 
 #endif

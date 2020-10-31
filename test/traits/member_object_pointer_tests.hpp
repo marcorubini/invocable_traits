@@ -2,11 +2,11 @@
 #define INV_TEST_TRAITS_MEMBER_OBJECT_POINTER
 
 #include <concepts>
-#include <marcorubini/invocable_traits/member_object_pointer_traits.hpp>
+#include <ruby/invocable_traits/member_object_pointer_traits.hpp>
 
 namespace member_object_pointer_tests
 {
-  using namespace inv;
+  using namespace ruby;
 
   namespace test0
   {

@@ -5,7 +5,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace ruby
+namespace ruby::invocable
 {
 
   // clang-format off
@@ -137,7 +137,7 @@ namespace ruby
       return false;
   }();
 
-  namespace impl
+  namespace invocable_impl
   {
     template<typename...>
     struct function_modify;
@@ -179,19 +179,19 @@ namespace ruby
 
   template<typename T>
     requires std::is_function_v<T>
-  using function_add_const_t = typename impl::function_modify<T>::add_const;
+  using function_add_const_t = typename invocable_impl::function_modify<T>::add_const;
 
   template<typename T>
     requires std::is_function_v<T>
-  using function_remove_const_t = typename impl::function_modify<T>::remove_const;
+  using function_remove_const_t = typename invocable_impl::function_modify<T>::remove_const;
 
   template<typename T>
     requires std::is_function_v<T>
-  using function_add_volatile_t = typename impl::function_modify<T>::add_volatile;
+  using function_add_volatile_t = typename invocable_impl::function_modify<T>::add_volatile;
 
   template<typename T>
     requires std::is_function_v<T>
-  using function_remove_volatile_t = typename impl::function_modify<T>::remove_volatile;
+  using function_remove_volatile_t = typename invocable_impl::function_modify<T>::remove_volatile;
 
   template<typename T>
     requires std::is_function_v<T>
@@ -203,29 +203,29 @@ namespace ruby
 
   template<typename T>
     requires std::is_function_v<T>
-  using function_add_variadic_t = typename impl::function_modify<T>::add_variadic;
+  using function_add_variadic_t = typename invocable_impl::function_modify<T>::add_variadic;
 
   template<typename T>
     requires std::is_function_v<T>
-  using function_remove_variadic_t = typename impl::function_modify<T>::remove_variadic;
+  using function_remove_variadic_t = typename invocable_impl::function_modify<T>::remove_variadic;
 
   template<typename T>
     requires std::is_function_v<T>
-  using function_add_noexcept_t = typename impl::function_modify<T>::add_noexcept;
+  using function_add_noexcept_t = typename invocable_impl::function_modify<T>::add_noexcept;
 
   template<typename T>
     requires std::is_function_v<T>
-  using function_remove_noexcept_t = typename impl::function_modify<T>::remove_noexcept;
+  using function_remove_noexcept_t = typename invocable_impl::function_modify<T>::remove_noexcept;
 
   template<typename T>
     requires std::is_function_v<T>
   using function_remove_lvalue_reference_t =
-      typename impl::function_modify<T>::remove_lvalue_reference;
+      typename invocable_impl::function_modify<T>::remove_lvalue_reference;
 
   template<typename T>
     requires std::is_function_v<T>
   using function_remove_rvalue_reference_t =
-      typename impl::function_modify<T>::remove_rvalue_reference;
+      typename invocable_impl::function_modify<T>::remove_rvalue_reference;
 
   template<typename T>
     requires std::is_function_v<T>

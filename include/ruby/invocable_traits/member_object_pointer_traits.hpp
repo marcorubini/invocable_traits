@@ -4,7 +4,7 @@
 #include <functional>
 #include <type_traits>
 
-namespace ruby
+namespace ruby::invocable
 {
   template<typename T>
   struct member_object_pointer_traits

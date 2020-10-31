@@ -8,7 +8,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace ruby
+namespace ruby::invocable
 {
 
   // clang-format off
@@ -140,7 +140,7 @@ namespace ruby
       return false;
   }();
 
-  namespace impl
+  namespace invocable_impl
   {
     template<typename...>
     struct function_modify;
@@ -182,19 +182,19 @@ namespace ruby
 
   template<typename T>
     requires std::is_function_v<T>
-  using function_add_const_t = typename impl::function_modify<T>::add_const;
+  using function_add_const_t = typename invocable_impl::function_modify<T>::add_const;
 
   template<typename T>
     requires std::is_function_v<T>
-  using function_remove_const_t = typename impl::function_modify<T>::remove_const;
+  using function_remove_const_t = typename invocable_impl::function_modify<T>::remove_const;
 
   template<typename T>
     requires std::is_function_v<T>
-  using function_add_volatile_t = typename impl::function_modify<T>::add_volatile;
+  using function_add_volatile_t = typename invocable_impl::function_modify<T>::add_volatile;
 
   template<typename T>
     requires std::is_function_v<T>
-  using function_remove_volatile_t = typename impl::function_modify<T>::remove_volatile;
+  using function_remove_volatile_t = typename invocable_impl::function_modify<T>::remove_volatile;
 
   template<typename T>
     requires std::is_function_v<T>
@@ -206,29 +206,29 @@ namespace ruby
 
   template<typename T>
     requires std::is_function_v<T>
-  using function_add_variadic_t = typename impl::function_modify<T>::add_variadic;
+  using function_add_variadic_t = typename invocable_impl::function_modify<T>::add_variadic;
 
   template<typename T>
     requires std::is_function_v<T>
-  using function_remove_variadic_t = typename impl::function_modify<T>::remove_variadic;
+  using function_remove_variadic_t = typename invocable_impl::function_modify<T>::remove_variadic;
 
   template<typename T>
     requires std::is_function_v<T>
-  using function_add_noexcept_t = typename impl::function_modify<T>::add_noexcept;
+  using function_add_noexcept_t = typename invocable_impl::function_modify<T>::add_noexcept;
 
   template<typename T>
     requires std::is_function_v<T>
-  using function_remove_noexcept_t = typename impl::function_modify<T>::remove_noexcept;
+  using function_remove_noexcept_t = typename invocable_impl::function_modify<T>::remove_noexcept;
 
   template<typename T>
     requires std::is_function_v<T>
   using function_remove_lvalue_reference_t =
-      typename impl::function_modify<T>::remove_lvalue_reference;
+      typename invocable_impl::function_modify<T>::remove_lvalue_reference;
 
   template<typename T>
     requires std::is_function_v<T>
   using function_remove_rvalue_reference_t =
-      typename impl::function_modify<T>::remove_rvalue_reference;
+      typename invocable_impl::function_modify<T>::remove_rvalue_reference;
 
   template<typename T>
     requires std::is_function_v<T>
@@ -374,7 +374,7 @@ namespace ruby
 #include <functional>
 #include <type_traits>
 
-namespace ruby
+namespace ruby::invocable
 {
   template<typename T>
   struct member_function_pointer_traits
@@ -409,7 +409,7 @@ namespace ruby
 #include <functional>
 #include <type_traits>
 
-namespace ruby
+namespace ruby::invocable
 {
   template<typename T>
   struct member_object_pointer_traits
@@ -439,7 +439,7 @@ namespace ruby
 
 #endif
 
-namespace ruby
+namespace ruby::invocable
 {
 
   template<typename T>
@@ -448,7 +448,7 @@ namespace ruby
 
   // clang-format off
 
-  namespace impl{
+  namespace invocable_impl{
     template<typename T>
     inline constexpr bool is_reference_wrapper_v = false;
 
@@ -465,10 +465,10 @@ namespace ruby
   
   template<typename T>
   concept InvokeDeducible= 
-    impl::InvokeDeducible<T> ||
-    (std::is_reference_v<T> && impl::InvokeDeducible<std::remove_reference_t<T>>) ||
-    (std::is_pointer_v<T> && impl::InvokeDeducible<std::remove_pointer_t<T>>) ||
-    (impl::is_reference_wrapper_v<T> && impl::InvokeDeducible<typename T::type>);
+    invocable_impl::InvokeDeducible<T> ||
+    (std::is_reference_v<T> && invocable_impl::InvokeDeducible<std::remove_reference_t<T>>) ||
+    (std::is_pointer_v<T> && invocable_impl::InvokeDeducible<std::remove_pointer_t<T>>) ||
+    (invocable_impl::is_reference_wrapper_v<T> && invocable_impl::InvokeDeducible<typename T::type>);
 
   template<typename T>
     requires std::is_function_v<T>
@@ -509,41 +509,45 @@ namespace ruby
   template<InvokeDeducible T, std::size_t index>
   using invocable_arg_t = function_arg_t<invocable_function_t<T>, index>;
 
-  namespace impl{
+  namespace invocable_impl{
     struct ARGUMENT_TYPE_IS_NOT_DEDUCIBLE{};
 
     template<typename T>
-    using maybe_function_t = std::conditional_t<ruby::InvokeDeducible<T>, invocable_function_t<T>, ARGUMENT_TYPE_IS_NOT_DEDUCIBLE>;
+    using maybe_function_t = std::conditional_t<ruby::invocable::InvokeDeducible<T>, invocable_function_t<T>, ARGUMENT_TYPE_IS_NOT_DEDUCIBLE>;
   }
 
   // clang-format on
 
   template<typename T>
-  inline constexpr auto invocable_arity_v = function_arity_v<impl::maybe_function_t<T>>;
+  inline constexpr auto invocable_arity_v = function_arity_v<invocable_impl::maybe_function_t<T>>;
 
   template<typename T>
-  inline constexpr auto invocable_is_const_v = function_is_const_v<impl::maybe_function_t<T>>;
+  inline constexpr auto invocable_is_const_v =
+      function_is_const_v<invocable_impl::maybe_function_t<T>>;
 
   template<typename T>
-  inline constexpr auto invocable_is_volatile_v = function_is_volatile_v<impl::maybe_function_t<T>>;
+  inline constexpr auto invocable_is_volatile_v =
+      function_is_volatile_v<invocable_impl::maybe_function_t<T>>;
 
   template<typename T>
-  inline constexpr auto invocable_is_variadic_v = function_is_variadic_v<impl::maybe_function_t<T>>;
+  inline constexpr auto invocable_is_variadic_v =
+      function_is_variadic_v<invocable_impl::maybe_function_t<T>>;
 
   template<typename T>
-  inline constexpr auto invocable_is_noexcept_v = function_is_noexcept_v<impl::maybe_function_t<T>>;
+  inline constexpr auto invocable_is_noexcept_v =
+      function_is_noexcept_v<invocable_impl::maybe_function_t<T>>;
 
   template<typename T>
   inline constexpr auto invocable_is_lvalue_reference_v =
-      function_is_lvalue_reference_v<impl::maybe_function_t<T>>;
+      function_is_lvalue_reference_v<invocable_impl::maybe_function_t<T>>;
 
   template<typename T>
   inline constexpr auto invocable_is_rvalue_reference_v =
-      function_is_rvalue_reference_v<impl::maybe_function_t<T>>;
+      function_is_rvalue_reference_v<invocable_impl::maybe_function_t<T>>;
 
   template<typename T>
   inline constexpr auto invocable_is_reference_v =
-      function_is_reference_v<impl::maybe_function_t<T>>;
-} // namespace inv
+      function_is_reference_v<invocable_impl::maybe_function_t<T>>;
+} // namespace ruby::invocable
 
 #endif

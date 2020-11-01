@@ -510,10 +510,11 @@ namespace ruby::invocable
   using invocable_arg_t = function_arg_t<invocable_function_t<T>, index>;
 
   namespace invocable_impl{
-    struct ARGUMENT_TYPE_IS_NOT_DEDUCIBLE{};
+    struct ARGUMENT_TYPE_IS_NOT_DEDUCIBLE{
+    };
 
     template<typename T>
-    using maybe_function_t = std::conditional_t<ruby::invocable::InvokeDeducible<T>, invocable_function_t<T>, ARGUMENT_TYPE_IS_NOT_DEDUCIBLE>;
+    using maybe_function_t = typename std::conditional_t<ruby::invocable::InvokeDeducible<T>, invocable_traits<T>, ARGUMENT_TYPE_IS_NOT_DEDUCIBLE>::function_type;
   }
 
   // clang-format on

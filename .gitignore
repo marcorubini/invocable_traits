@@ -1,4 +1,5 @@
 *compile_commands.json
 *cmake-build-*/
 *clangd/
+*build*
 

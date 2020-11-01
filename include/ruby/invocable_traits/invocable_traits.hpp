@@ -27,6 +27,11 @@ namespace ruby::invocable
       std::is_member_function_pointer_v<T> ||
       std::is_member_object_pointer_v<T> ||
       std::is_member_function_pointer_v<decltype(&T::operator())>;
+
+    template<class T>
+    using deduce_member_object_t = std::conditional_t<std::is_const_v<member_object_pointer_object_t<T>>, 
+          member_object_pointer_class_t<T> const&,
+          member_object_pointer_class_t<T> &>;
   }
   
   template<typename T>
@@ -46,7 +51,8 @@ namespace ruby::invocable
   
   template<typename T>
     requires std::is_member_object_pointer_v<T>
-  struct invocable_traits<T> : function_types<0,0,0,0,0,member_object_pointer_object_t<T>, member_object_pointer_class_t<T>* >{};
+  struct invocable_traits<T> : function_types<0,0,0,0,0,member_object_pointer_object_t<T>,
+    invocable_impl::deduce_member_object_t<T> >{};
 
   template<typename T>
     requires std::is_member_function_pointer_v<decltype(&T::operator())>

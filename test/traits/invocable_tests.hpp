@@ -35,6 +35,10 @@ namespace invocable_tests
   inline void test_deducible_invocable_member_object()
   {
     static_assert( InvokeDeducible<decltype(&Fn4::x)> );
+    using const_mem = int const Fn4::*;
+    static_assert( InvokeDeducible<const_mem> );
+    static_assert( std::same_as<invocable_ret_t<const_mem>, int const> );
+    static_assert( std::same_as<invocable_arg_t<const_mem, 0>, Fn4 const&> );
   }
 
   inline void test_deducible_invocable_functor()
@@ -83,7 +87,7 @@ namespace invocable_tests
     static_assert( std::same_as<invocable_function_t<Fn1>, int(int) const> );
     static_assert( std::same_as<invocable_function_t<Fn2>, float(int)> );
     static_assert( std::same_as<invocable_function_t<Fn3>, double(int) noexcept> );
-    static_assert( std::same_as<invocable_function_t<decltype(&Fn4::x)>, char(Fn4*)> );
+    static_assert( std::same_as<invocable_function_t<decltype(&Fn4::x)>, char(Fn4&)> );
   }
 
 }

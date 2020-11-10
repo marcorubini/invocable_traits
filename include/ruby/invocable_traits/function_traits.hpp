@@ -1,11 +1,10 @@
-#ifndef RUBY_INVOCABLE_FUNCTION_TRAITS
-#define RUBY_INVOCABLE_FUNCTION_TRAITS
+#pragma once
 
 #include <tuple>
 #include <type_traits>
 #include <utility>
 
-namespace ruby::invocable
+namespace ruby::inv
 {
 
   // clang-format off
@@ -364,4 +363,3 @@ namespace ruby::invocable
 
 } // namespace inv
 
-#endif

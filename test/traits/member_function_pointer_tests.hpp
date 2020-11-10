@@ -1,12 +1,10 @@
-#ifndef INV_TEST_TRAITS_MEMBER_FUNCTION_POINTER
-#define INV_TEST_TRAITS_MEMBER_FUNCTION_POINTER
 
 #include <concepts>
 #include <ruby/invocable_traits/member_function_pointer_traits.hpp>
 
 namespace member_function_pointer_tests
 {
-  using namespace ruby::invocable;
+  using namespace ruby::inv;
 
   namespace test0
   {
@@ -69,4 +67,3 @@ namespace member_function_pointer_tests
   } // namespace test1
 } // namespace member_function_pointer_tests
 
-#endif

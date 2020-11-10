@@ -1,14 +1,10 @@
-#ifndef RUBY_INVOCABLE_TRAITS_HPP
-#define RUBY_INVOCABLE_TRAITS_HPP
-
-#ifndef RUBY_INVOCABLE_FUNCTION_TRAITS
-#define RUBY_INVOCABLE_FUNCTION_TRAITS
+#pragma once
 
 #include <tuple>
 #include <type_traits>
 #include <utility>
 
-namespace ruby::invocable
+namespace ruby::inv
 {
 
   // clang-format off
@@ -176,7 +172,7 @@ namespace ruby::invocable
       using remove_lvalue_reference = make_function_t<C, V, R & 0b10, IV, IN, ret, Args...>;
       using remove_rvalue_reference = make_function_t<C, V, R & 0b01, IV, IN, ret, Args...>;
     };
-  } // namespace impl
+  } // namespace invocable_impl
 
   // clang-format off
 
@@ -267,19 +263,19 @@ namespace ruby::invocable
 #define RUBY_MAYBE_VARIADIC(X) RUBY_CONCAT2(RUBY_VARIADIC_, X)
 
 #define RUBY_DEFINE_MAKE_FUNCTION_IMPL(C, V, R, IV, Qual, Pack) \
-  template<bool IN, typename Ret, typename... Args>        \
-  struct make_function<C, V, R, IV, IN, Ret, Args...>      \
-  {                                                        \
-    using type = Ret(Args... Pack) Qual noexcept(IN);      \
+  template<bool IN, typename Ret, typename... Args>             \
+  struct make_function<C, V, R, IV, IN, Ret, Args...>           \
+  {                                                             \
+    using type = Ret(Args... Pack) Qual noexcept(IN);           \
   };
 
 #define RUBY_DEFINE_MAKE_FUNCTION(C, V, R, IV) \
   RUBY_DEFINE_MAKE_FUNCTION_IMPL(C, V, R, IV, RUBY_MAYBE_CVREF(C, V, R), RUBY_MAYBE_VARIADIC(IV))
 
-#define RUBY_DEFINE_FUNCTION_TRAITS_IMPL(C, V, R, IV, Qual, Pack)  \
-  template<bool IN, typename Ret, typename... Args>           \
-  struct function_traits<Ret(Args... Pack) Qual noexcept(IN)> \
-    : function_types<C, V, R, IV, IN, Ret, Args...>           \
+#define RUBY_DEFINE_FUNCTION_TRAITS_IMPL(C, V, R, IV, Qual, Pack) \
+  template<bool IN, typename Ret, typename... Args>               \
+  struct function_traits<Ret(Args... Pack) Qual noexcept(IN)>     \
+    : function_types<C, V, R, IV, IN, Ret, Args...>               \
   {};
 
 #define RUBY_DEFINE_FUNCTION_TRAITS(C, V, R, IV) \
@@ -365,16 +361,11 @@ namespace ruby::invocable
 #undef RUBY_MAYBE_VARIADIC
 #undef RUBY_MAYBE_CVREF
 
-} // namespace inv
-
-#endif
-#ifndef RUBY_INVOCABLE_MEMBER_FUNCTION_POINTER_TRAITS_HPP
-#define RUBY_INVOCABLE_MEMBER_FUNCTION_POINTER_TRAITS_HPP
-
+} // namespace ruby::inv
 #include <functional>
 #include <type_traits>
 
-namespace ruby::invocable
+namespace ruby::inv
 {
   template<typename T>
   struct member_function_pointer_traits
@@ -400,16 +391,11 @@ namespace ruby::invocable
 
   // clang-format on
 
-} // namespace ruby
-
-#endif
-#ifndef RUBY_INVOCABLE_MEMBER_OBJECT_POINTER_TRAITS_HPP
-#define RUBY_INVOCABLE_MEMBER_OBJECT_POINTER_TRAITS_HPP
-
+} // namespace ruby::inv
 #include <functional>
 #include <type_traits>
 
-namespace ruby::invocable
+namespace ruby::inv
 {
   template<typename T>
   struct member_object_pointer_traits
@@ -435,11 +421,9 @@ namespace ruby::invocable
 
   // clang-format on
 
-} // namespace ruby
+} // namespace ruby::inv
 
-#endif
-
-namespace ruby::invocable
+namespace ruby::inv
 {
 
   template<typename T>
@@ -456,7 +440,7 @@ namespace ruby::invocable
     inline constexpr bool is_reference_wrapper_v<std::reference_wrapper<T>> = true;
     
     template<typename T>
-    concept InvokeDeducible =
+    concept invoke_deducible =
       std::is_function_v<T> ||
       std::is_member_function_pointer_v<T> ||
       std::is_member_object_pointer_v<T> ||
@@ -469,11 +453,11 @@ namespace ruby::invocable
   }
   
   template<typename T>
-  concept InvokeDeducible= 
-    invocable_impl::InvokeDeducible<T> ||
-    (std::is_reference_v<T> && invocable_impl::InvokeDeducible<std::remove_reference_t<T>>) ||
-    (std::is_pointer_v<T> && invocable_impl::InvokeDeducible<std::remove_pointer_t<T>>) ||
-    (invocable_impl::is_reference_wrapper_v<T> && invocable_impl::InvokeDeducible<typename T::type>);
+  concept invoke_deducible = 
+    invocable_impl::invoke_deducible<T> ||
+    (std::is_reference_v<T> && invocable_impl::invoke_deducible<std::remove_reference_t<T>>) ||
+    (std::is_pointer_v<T> && invocable_impl::invoke_deducible<std::remove_pointer_t<T>>) ||
+    (invocable_impl::is_reference_wrapper_v<T> && invocable_impl::invoke_deducible<typename T::type>);
 
   template<typename T>
     requires std::is_function_v<T>
@@ -503,16 +487,16 @@ namespace ruby::invocable
   template<typename T>
   struct invocable_traits<T*> : invocable_traits<T>{};
   
-  template<InvokeDeducible T>
+  template< invoke_deducible T>
   using invocable_function_t = typename invocable_traits<T>::function_type;
 
-  template<InvokeDeducible T>
+  template< invoke_deducible T>
   using invocable_ret_t = function_ret_t<invocable_function_t<T>>;
 
-  template<InvokeDeducible T>
+  template< invoke_deducible T>
   using invocable_args_t = function_args_t<invocable_function_t<T>>;
 
-  template<InvokeDeducible T, std::size_t index>
+  template< invoke_deducible T, std::size_t index>
   using invocable_arg_t = function_arg_t<invocable_function_t<T>, index>;
 
   namespace invocable_impl{
@@ -520,7 +504,7 @@ namespace ruby::invocable
     };
 
     template<typename T>
-    using maybe_function_t = typename std::conditional_t<ruby::invocable::InvokeDeducible<T>, invocable_traits<T>, ARGUMENT_TYPE_IS_NOT_DEDUCIBLE>::function_type;
+    using maybe_function_t = typename std::conditional_t<invoke_deducible <T>, invocable_traits<T>, ARGUMENT_TYPE_IS_NOT_DEDUCIBLE>::function_type;
   }
 
   // clang-format on
@@ -556,5 +540,3 @@ namespace ruby::invocable
   inline constexpr auto invocable_is_reference_v =
       function_is_reference_v<invocable_impl::maybe_function_t<T>>;
 } // namespace ruby::invocable
-
-#endif

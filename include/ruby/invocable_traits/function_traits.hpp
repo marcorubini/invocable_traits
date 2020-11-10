@@ -1,11 +1,10 @@
-#ifndef RUBY_INVOCABLE_FUNCTION_TRAITS
-#define RUBY_INVOCABLE_FUNCTION_TRAITS
+#pragma once
 
 #include <tuple>
 #include <type_traits>
 #include <utility>
 
-namespace ruby::invocable
+namespace ruby::inv
 {
 
   // clang-format off
@@ -173,7 +172,7 @@ namespace ruby::invocable
       using remove_lvalue_reference = make_function_t<C, V, R & 0b10, IV, IN, ret, Args...>;
       using remove_rvalue_reference = make_function_t<C, V, R & 0b01, IV, IN, ret, Args...>;
     };
-  } // namespace impl
+  } // namespace invocable_impl
 
   // clang-format off
 
@@ -264,19 +263,19 @@ namespace ruby::invocable
 #define RUBY_MAYBE_VARIADIC(X) RUBY_CONCAT2(RUBY_VARIADIC_, X)
 
 #define RUBY_DEFINE_MAKE_FUNCTION_IMPL(C, V, R, IV, Qual, Pack) \
-  template<bool IN, typename Ret, typename... Args>        \
-  struct make_function<C, V, R, IV, IN, Ret, Args...>      \
-  {                                                        \
-    using type = Ret(Args... Pack) Qual noexcept(IN);      \
+  template<bool IN, typename Ret, typename... Args>             \
+  struct make_function<C, V, R, IV, IN, Ret, Args...>           \
+  {                                                             \
+    using type = Ret(Args... Pack) Qual noexcept(IN);           \
   };
 
 #define RUBY_DEFINE_MAKE_FUNCTION(C, V, R, IV) \
   RUBY_DEFINE_MAKE_FUNCTION_IMPL(C, V, R, IV, RUBY_MAYBE_CVREF(C, V, R), RUBY_MAYBE_VARIADIC(IV))
 
-#define RUBY_DEFINE_FUNCTION_TRAITS_IMPL(C, V, R, IV, Qual, Pack)  \
-  template<bool IN, typename Ret, typename... Args>           \
-  struct function_traits<Ret(Args... Pack) Qual noexcept(IN)> \
-    : function_types<C, V, R, IV, IN, Ret, Args...>           \
+#define RUBY_DEFINE_FUNCTION_TRAITS_IMPL(C, V, R, IV, Qual, Pack) \
+  template<bool IN, typename Ret, typename... Args>               \
+  struct function_traits<Ret(Args... Pack) Qual noexcept(IN)>     \
+    : function_types<C, V, R, IV, IN, Ret, Args...>               \
   {};
 
 #define RUBY_DEFINE_FUNCTION_TRAITS(C, V, R, IV) \
@@ -362,6 +361,4 @@ namespace ruby::invocable
 #undef RUBY_MAYBE_VARIADIC
 #undef RUBY_MAYBE_CVREF
 
-} // namespace inv
-
-#endif
+} // namespace ruby::inv

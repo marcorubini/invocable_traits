@@ -1,10 +1,9 @@
-#ifndef RUBY_INVOCABLE_MEMBER_OBJECT_POINTER_TRAITS_HPP
-#define RUBY_INVOCABLE_MEMBER_OBJECT_POINTER_TRAITS_HPP
+#pragma once
 
 #include <functional>
 #include <type_traits>
 
-namespace ruby::invocable
+namespace ruby::inv
 {
   template<typename T>
   struct member_object_pointer_traits
@@ -30,6 +29,4 @@ namespace ruby::invocable
 
   // clang-format on
 
-} // namespace ruby
-
-#endif
+} // namespace ruby::inv

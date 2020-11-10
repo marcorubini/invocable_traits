@@ -1,11 +1,9 @@
-#ifndef INV_TEST_TRAITS_FUNCTION_HPP
-#define INV_TEST_TRAITS_FUNCTION_HPP
 
 #include <ruby/invocable_traits/function_traits.hpp>
 
 namespace function_tests
 {
-  using namespace ruby::invocable;
+  using namespace ruby::inv;
 
   using Fn0 = int();
   using Fn1 = int const();
@@ -190,4 +188,3 @@ namespace function_tests
 
 } // namespace function_tests
 
-#endif

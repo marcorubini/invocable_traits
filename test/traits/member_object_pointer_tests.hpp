@@ -1,10 +1,12 @@
+#ifndef INV_TEST_TRAITS_MEMBER_OBJECT_POINTER
+#define INV_TEST_TRAITS_MEMBER_OBJECT_POINTER
 
 #include <concepts>
 #include <ruby/invocable_traits/member_object_pointer_traits.hpp>
 
 namespace member_object_pointer_tests
 {
-  using namespace ruby::inv;
+  using namespace ruby::invocable;
 
   namespace test0
   {
@@ -69,3 +71,5 @@ namespace member_object_pointer_tests
   } // namespace test1
 
 } // namespace member_object_pointer_tests
+
+#endif
